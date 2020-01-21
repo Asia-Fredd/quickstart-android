@@ -1,0 +1,98 @@
+{
+  "project_info": {
+    "project_number": "710590407203",
+    "firebase_url": "https://tk3c-ml-kit.firebaseio.com",
+    "project_id": "tk3c-ml-kit",
+    "storage_bucket": "tk3c-ml-kit.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:710590407203:android:d35534425efec94caec796",
+        "android_client_info": {
+          "package_name": "asia.fredd.tools.creditcardutils"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "710590407203-df9k6i69sg6jueittb6stq645ifi3r2v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7gA0khtjPdkXCjIAX-xs6x1Q0504FMJw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "710590407203-df9k6i69sg6jueittb6stq645ifi3r2v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:710590407203:android:2f0f3b322e141dc5aec796",
+        "android_client_info": {
+          "package_name": "asia.fredd.tools.creditcardutils.mlkit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "710590407203-df9k6i69sg6jueittb6stq645ifi3r2v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7gA0khtjPdkXCjIAX-xs6x1Q0504FMJw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "710590407203-df9k6i69sg6jueittb6stq645ifi3r2v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:710590407203:android:eef54ee9be9beb2aaec796",
+        "android_client_info": {
+          "package_name": "com.google.firebase.samples.apps.mlkit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "710590407203-df9k6i69sg6jueittb6stq645ifi3r2v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7gA0khtjPdkXCjIAX-xs6x1Q0504FMJw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "710590407203-df9k6i69sg6jueittb6stq645ifi3r2v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
