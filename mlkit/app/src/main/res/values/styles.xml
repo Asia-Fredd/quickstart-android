@@ -1,2 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="Theme.MaterialComponents.Bridge.TK3C">
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="actionBarStyle">@style/Widget.AppCompat.ActionBar.Solid.TK3C</item>
+        <item name="android:actionBarStyle">?attr/actionBarStyle</item>
+        <item name="homeAsUpIndicator">@drawable/abc_ic_ab_back_material</item>
+        <item name="android:homeAsUpIndicator">?attr/homeAsUpIndicator</item>
+    </style>
+    <style name="Widget.AppCompat.ActionBar.Solid.TK3C">
+        <item name="titleTextStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title.TK3C</item>
+        <item name="android:titleTextStyle">?attr/titleTextStyle</item>
+    </style>
+    <style name="TextAppearance.AppCompat.Widget.ActionBar.Title.TK3C">
+        <item name="android:textColor">@android:color/black</item>
+    </style>
 </resources>

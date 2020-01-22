@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#ffe30a</color>
+    <!--<color name="colorPrimary">#FCD50B</color>-->
+    <color name="colorPrimaryDark">#917E07</color>
+    <!--<color name="colorAccent">#55C500</color>-->
+    <color name="colorAccent">@color/colorPrimary</color>
+
+    <color name="tk_green">#55C500</color>
+</resources>
