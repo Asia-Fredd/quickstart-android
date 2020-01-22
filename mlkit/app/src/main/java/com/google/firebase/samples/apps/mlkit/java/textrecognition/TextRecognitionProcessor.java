@@ -16,6 +16,10 @@ package com.google.firebase.samples.apps.mlkit.java.textrecognition;
 import android.graphics.Bitmap;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import asia.fredd.tools.creditcardutils.base.CardDateThru;
+import asia.fredd.tools.creditcardutils.base.CardType;
+import asia.fredd.tools.creditcardutils.base.CreditCard;
+
 import android.util.Log;
 
 import com.google.android.gms.tasks.Task;
@@ -23,7 +27,6 @@ import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.text.FirebaseVisionText;
 import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer;
-import com.google.firebase.samples.apps.mlkit.common.CameraImageGraphic;
 import com.google.firebase.samples.apps.mlkit.common.FrameMetadata;
 import com.google.firebase.samples.apps.mlkit.common.GraphicOverlay;
 import com.google.firebase.samples.apps.mlkit.java.VisionProcessorBase;
@@ -65,24 +68,45 @@ public class TextRecognitionProcessor extends VisionProcessorBase<FirebaseVision
             @NonNull FrameMetadata frameMetadata,
             @NonNull GraphicOverlay graphicOverlay) {
         graphicOverlay.clear();
-        if (originalCameraImage != null) {
-            CameraImageGraphic imageGraphic = new CameraImageGraphic(graphicOverlay,
-                    originalCameraImage);
-            graphicOverlay.add(imageGraphic);
-        }
+//        if (originalCameraImage != null) {
+//            com.google.firebase.samples.apps.mlkit.common.CameraImageGraphic imageGraphic;
+//            imageGraphic = new com.google.firebase.samples.apps.mlkit.common.CameraImageGraphic(
+//                    graphicOverlay,
+//                    originalCameraImage
+//            );
+//            graphicOverlay.add(imageGraphic);
+//        }
         List<FirebaseVisionText.TextBlock> blocks = results.getTextBlocks();
-        for (int i = 0; i < blocks.size(); i++) {
-//            List<FirebaseVisionText.Line> lines = blocks.get(i).getLines();
-//            for (int j = 0; j < lines.size(); j++) {
-//                List<FirebaseVisionText.Element> elements = lines.get(j).getElements();
-//                for (int k = 0; k < elements.size(); k++) {
-//                    GraphicOverlay.Graphic textGraphic = new TextGraphic(graphicOverlay,
-//                            elements.get(k));
-//                    graphicOverlay.add(textGraphic);
-//                }
-//            }
-            GraphicOverlay.Graphic textGraphic = new TextGraphic(graphicOverlay, blocks.get(i));
-            graphicOverlay.add(textGraphic);
+        int count = blocks.size();
+        FirebaseVisionText.TextBlock item;
+        String text;
+        CardType card = null;
+        CardDateThru dateThru = null;
+        for (int i = 0; i < count; ++i) {
+            if ((item = blocks.get(i)) != null && (text = item.getText()).length() > 0) {
+                if (card == null) {
+                    card = CreditCard.ExtractCardNumber(text);
+                    CharSequence o = CreditCard.ExtractNumber(text, CreditCard.DefaultPattern);
+                    if (o != null) {
+                        TextGraphic ocrGraphic = new TextGraphic(graphicOverlay, item);
+                        graphicOverlay.add(ocrGraphic);
+                    }
+                }
+                if (dateThru == null) {
+                    dateThru = CreditCard.ExtractCardDateThru(text);
+                    if (dateThru != null) {
+                        TextGraphic ocrGraphic = new TextGraphic(graphicOverlay, item);
+                        graphicOverlay.add(ocrGraphic);
+                    }
+                }
+            }
+            if (card != null && dateThru != null) {
+                Log.d("OcrDetectorProcessor", "Card Number detected! = " + card.getCardNumber());
+                Log.d("OcrDetectorProcessor", "Card Date Thru detected! = " + dateThru.getDate());
+                card.setCardDateThru(dateThru);
+                graphicOverlay.post(card);
+                break;
+            }
         }
         graphicOverlay.postInvalidate();
     }

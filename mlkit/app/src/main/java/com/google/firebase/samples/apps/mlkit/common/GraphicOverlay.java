@@ -14,7 +14,12 @@
 package com.google.firebase.samples.apps.mlkit.common;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Canvas;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -22,6 +27,17 @@ import com.google.android.gms.vision.CameraSource;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import asia.fredd.tools.creditcardutils.base.CardDateThru;
+import asia.fredd.tools.creditcardutils.base.CardType;
+import asia.fredd.tools.creditcardutils.type.AmericanExpress;
+import asia.fredd.tools.creditcardutils.type.DiscoverCard;
+import asia.fredd.tools.creditcardutils.type.MasterCard;
+import asia.fredd.tools.creditcardutils.type.UnionPay;
+import asia.fredd.tools.creditcardutils.type.VisaCard;
 
 /**
  * A view which renders a series of custom graphics to be overlayed on top of an associated preview
@@ -118,8 +134,96 @@ public class GraphicOverlay extends View {
     }
   }
 
-  public GraphicOverlay(Context context, AttributeSet attrs) {
-    super(context, attrs);
+  private AlertDialog alertDialog;
+  private Handler handler;
+  private boolean isReject;
+  private CardType mCard;
+
+  public GraphicOverlay(final Context context, AttributeSet attrs) {
+      super(context, attrs);
+      alertDialog = new AlertDialog.Builder(context)
+              .setNegativeButton("離開", new DialogInterface.OnClickListener() {
+                  @Override
+                  public void onClick(DialogInterface dialog, int which) {
+                      isReject = true;
+                      LocalBroadcastManager.getInstance(context)
+                              .sendBroadcast(
+                                      new Intent("asia.fredd.tools.creditcardutils")
+                              );
+                  }
+              })
+              .setNeutralButton("重讀", new DialogInterface.OnClickListener() {
+                  @Override
+                  public void onClick(DialogInterface dialog, int which) {
+                      isReject = false;
+                      mCard = null;
+                  }
+              })
+              .setPositiveButton("確定", new DialogInterface.OnClickListener() {
+                  @Override
+                  public void onClick(DialogInterface dialog, int which) {
+                      isReject = true;
+                      LocalBroadcastManager.getInstance(context)
+                              .sendBroadcast(
+                                      new Intent("asia.fredd.tools.creditcardutils")
+                                              .putExtra("card_number", mCard != null ? mCard.getCardNumber() : null)
+                                              .putExtra("card_date", mCard != null ? mCard.getCardDateThru().getDate() : null)
+                              );
+                  }
+              }).create();
+      handler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
+          @Override
+          public boolean handleMessage(Message msg) {
+              if (!isReject && alertDialog != null && !alertDialog.isShowing()) {
+                  mCard = (CardType) msg.obj;
+                  if (mCard instanceof AmericanExpress) {
+                      alertDialog.setTitle("美國運通");
+                  } else if (mCard instanceof DiscoverCard) {
+                      alertDialog.setTitle("發現卡");
+                  } else if (mCard instanceof VisaCard) {
+                      alertDialog.setTitle("VISA");
+                  } else if (mCard instanceof MasterCard) {
+                      alertDialog.setTitle("MasterCard");
+                  } else if (mCard instanceof UnionPay) {
+                      alertDialog.setTitle("中國銀聯");
+                  }
+                  StringBuilder sb = new StringBuilder("卡號\n");
+                  CharSequence cardNumber = mCard.getCardNumber();
+                  switch (cardNumber.length()) {
+                      case 15:
+                          sb.append(cardNumber, 0, 4)
+                                  .append(" ")
+                                  .append(cardNumber, 4, 10)
+                                  .append(" ")
+                                  .append(cardNumber, 10, 15);
+                          break;
+                      case 16:
+                          sb.append(cardNumber, 0, 4)
+                                  .append(" ")
+                                  .append(cardNumber, 4, 8)
+                                  .append(" ")
+                                  .append(cardNumber, 8, 12)
+                                  .append(" ")
+                                  .append(cardNumber, 12, 16);
+                          break;
+                      default:
+                          sb.append(cardNumber);
+                          break;
+                  }
+                  CardDateThru dateThru = mCard.getCardDateThru();
+                  if (dateThru != null) {
+                      CharSequence date = dateThru.getDate();
+                      sb.append("\n\n有效期限\n")
+                              .append(date, 0, 2)
+                              .append("/")
+                              .append(date, 2, 4);
+                  }
+                  alertDialog.setMessage(sb);
+                  alertDialog.show();
+              }
+              return true;
+          }
+      });
   }
 
   /** Removes all graphics from the overlay. */
@@ -135,6 +239,10 @@ public class GraphicOverlay extends View {
     synchronized (lock) {
       graphics.add(graphic);
     }
+  }
+
+  public void post(@NonNull CardType card) {
+      Message.obtain(handler, 1, card).sendToTarget();
   }
 
   /** Removes a graphic from the overlay. */
