@@ -82,7 +82,7 @@ public final class StillImageActivity extends AppCompatActivity {
 
   private ImageView preview;
   private GraphicOverlay graphicOverlay;
-  private String selectedMode = CLOUD_LABEL_DETECTION;
+  private String selectedMode = CLOUD_TEXT_DETECTION;
   private String selectedSize = SIZE_PREVIEW;
 
   boolean isLandScape;
@@ -197,6 +197,7 @@ public final class StillImageActivity extends AppCompatActivity {
     dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     // attaching data adapter to spinner
     featureSpinner.setAdapter(dataAdapter);
+    featureSpinner.setSelection(2);
     featureSpinner.setOnItemSelectedListener(
         new OnItemSelectedListener() {
 

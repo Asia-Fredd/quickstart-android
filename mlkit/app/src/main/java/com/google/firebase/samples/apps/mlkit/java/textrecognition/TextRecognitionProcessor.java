@@ -72,15 +72,17 @@ public class TextRecognitionProcessor extends VisionProcessorBase<FirebaseVision
         }
         List<FirebaseVisionText.TextBlock> blocks = results.getTextBlocks();
         for (int i = 0; i < blocks.size(); i++) {
-            List<FirebaseVisionText.Line> lines = blocks.get(i).getLines();
-            for (int j = 0; j < lines.size(); j++) {
-                List<FirebaseVisionText.Element> elements = lines.get(j).getElements();
-                for (int k = 0; k < elements.size(); k++) {
-                    GraphicOverlay.Graphic textGraphic = new TextGraphic(graphicOverlay,
-                            elements.get(k));
-                    graphicOverlay.add(textGraphic);
-                }
-            }
+//            List<FirebaseVisionText.Line> lines = blocks.get(i).getLines();
+//            for (int j = 0; j < lines.size(); j++) {
+//                List<FirebaseVisionText.Element> elements = lines.get(j).getElements();
+//                for (int k = 0; k < elements.size(); k++) {
+//                    GraphicOverlay.Graphic textGraphic = new TextGraphic(graphicOverlay,
+//                            elements.get(k));
+//                    graphicOverlay.add(textGraphic);
+//                }
+//            }
+            GraphicOverlay.Graphic textGraphic = new TextGraphic(graphicOverlay, blocks.get(i));
+            graphicOverlay.add(textGraphic);
         }
         graphicOverlay.postInvalidate();
     }

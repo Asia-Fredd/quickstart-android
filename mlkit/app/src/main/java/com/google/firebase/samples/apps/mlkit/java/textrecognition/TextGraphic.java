@@ -28,15 +28,15 @@ import com.google.firebase.samples.apps.mlkit.common.GraphicOverlay.Graphic;
  */
 public class TextGraphic extends Graphic {
 
-  private static final int TEXT_COLOR = Color.WHITE;
+  private static final int TEXT_COLOR = Color.RED;
   private static final float TEXT_SIZE = 54.0f;
   private static final float STROKE_WIDTH = 4.0f;
 
   private final Paint rectPaint;
   private final Paint textPaint;
-  private final FirebaseVisionText.Element text;
+  private final FirebaseVisionText.TextBlock text;
 
-  TextGraphic(GraphicOverlay overlay, FirebaseVisionText.Element text) {
+  TextGraphic(GraphicOverlay overlay, FirebaseVisionText.TextBlock text) {
     super(overlay);
 
     this.text = text;

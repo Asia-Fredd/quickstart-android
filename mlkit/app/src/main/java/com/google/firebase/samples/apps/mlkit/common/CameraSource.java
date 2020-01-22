@@ -30,7 +30,6 @@ import android.view.SurfaceHolder;
 import android.view.WindowManager;
 
 import com.google.android.gms.common.images.Size;
-import com.google.firebase.samples.apps.mlkit.common.preference.PreferenceUtils;
 
 import java.io.IOException;
 import java.lang.Thread.State;
@@ -54,8 +53,8 @@ public class CameraSource {
   public static final int CAMERA_FACING_FRONT = CameraInfo.CAMERA_FACING_FRONT;
 
   public static final int IMAGE_FORMAT = ImageFormat.NV21;
-  public static final int DEFAULT_REQUESTED_CAMERA_PREVIEW_WIDTH = 480;
-  public static final int DEFAULT_REQUESTED_CAMERA_PREVIEW_HEIGHT = 360;
+  public static final int DEFAULT_REQUESTED_CAMERA_PREVIEW_WIDTH = 640;//480;
+  public static final int DEFAULT_REQUESTED_CAMERA_PREVIEW_HEIGHT = 480;//360;
 
   private static final String TAG = "MIDemoApp:CameraSource";
 
@@ -276,7 +275,7 @@ public class CameraSource {
     }
     Camera camera = Camera.open(requestedCameraId);
 
-    SizePair sizePair = PreferenceUtils.getCameraPreviewSizePair(activity, requestedCameraId);
+    SizePair sizePair = null;//com.google.firebase.samples.apps.mlkit.common.preference.PreferenceUtils.getCameraPreviewSizePair(activity, requestedCameraId);
     if (sizePair == null) {
       sizePair =
           selectSizePair(

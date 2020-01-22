@@ -23,7 +23,6 @@ import android.view.SurfaceView;
 import android.view.ViewGroup;
 
 import com.google.android.gms.common.images.Size;
-import com.google.firebase.samples.apps.mlkit.common.preference.PreferenceUtils;
 
 import java.io.IOException;
 
@@ -85,7 +84,7 @@ public class CameraSourcePreview extends ViewGroup {
   @SuppressLint("MissingPermission")
   private void startIfReady() throws IOException {
     if (startRequested && surfaceAvailable) {
-      if (PreferenceUtils.isCameraLiveViewportEnabled(context)) {
+      if (true/*com.google.firebase.samples.apps.mlkit.common.preference.PreferenceUtils.isCameraLiveViewportEnabled(context)*/) {
         cameraSource.start(surfaceView.getHolder());
       } else {
         cameraSource.start();
@@ -154,16 +153,34 @@ public class CameraSourcePreview extends ViewGroup {
     // Computes height and width for potentially doing fit width.
     int childWidth = layoutWidth;
     int childHeight = (int) (((float) layoutWidth / (float) width) * height);
+    int childXOffset = 0;
+    int childYOffset = 0;
+    float widthRatio = (float) layoutWidth / (float) width;
+    float heightRatio = (float) layoutHeight / (float) height;
 
-    // If height is too tall using fit width, does fit height instead.
-    if (childHeight > layoutHeight) {
-      childHeight = layoutHeight;
-      childWidth = (int) (((float) layoutHeight / (float) height) * width);
-    }
+      // To fill the view with the camera preview, while also preserving the correct aspect ratio,
+      // it is usually necessary to slightly oversize the child and to crop off portions along one
+      // of the dimensions.  We scale up based on the dimension requiring the most correction, and
+      // compute a crop offset for the other dimension.
+      if (widthRatio > heightRatio) {
+          childWidth = layoutWidth;
+          childHeight = (int) ((float) height * widthRatio);
+          childYOffset = (childHeight - layoutHeight) / 2;
+      } else {
+          childWidth = (int) ((float) width * heightRatio);
+          childHeight = layoutHeight;
+          childXOffset = (childWidth - layoutWidth) / 2;
+      }
 
     for (int i = 0; i < getChildCount(); ++i) {
-      getChildAt(i).layout(0, 0, childWidth, childHeight);
+      //getChildAt(i).layout(0, 0, childWidth, childHeight);
       Log.d(TAG, "Assigned view: " + i);
+      // One dimension will be cropped.  We shift child over or up by this offset and adjust
+      // the size to maintain the proper aspect ratio.
+      getChildAt(i).layout(
+              -1 * childXOffset, -1 * childYOffset,
+              childWidth - childXOffset, childHeight - childYOffset
+      );
     }
 
     try {
